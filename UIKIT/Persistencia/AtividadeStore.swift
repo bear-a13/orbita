@@ -62,5 +62,6 @@ final class AtividadeStore {
         } catch {
             print("❌ Erro ao salvar: \(error)")
         }
+        atualizarSnapshot()
     }
 }

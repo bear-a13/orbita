@@ -102,6 +102,12 @@ final class UniversoViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if planetas.isEmpty { carregarAtividadesDoBanco() }
+        // mantém o widget em dia com o que está em órbita
+        store.atualizarSnapshot()
+        if let id = atividadePendenteDeAbertura {
+            atividadePendenteDeAbertura = nil
+            abrirAtividadeAgora(id)
+        }
     }
 
 
@@ -301,6 +307,37 @@ final class UniversoViewController: UIViewController {
             if folga > maiorFolga { maiorFolga = folga; melhor = candidato }
         }
         return melhor
+    }
+
+    // MARK: - Deep link do widget
+
+    private var atividadePendenteDeAbertura: UUID?
+
+    /// Chamado pelo SceneDelegate quando o app é aberto por um planeta do widget.
+    func abrirAtividade(id: UUID) {
+        if viewIfLoaded?.window != nil {
+            abrirAtividadeAgora(id)
+        } else {
+            // app ainda não está na tela (abertura a frio): guarda para o viewDidAppear
+            atividadePendenteDeAbertura = id
+        }
+    }
+
+    private func abrirAtividadeAgora(_ id: UUID) {
+        // o widget pode estar atrasado e mostrar uma atividade já concluída
+        guard let atividade = store.buscar(id: id), atividade.concluidaEm == nil else { return }
+        // não joga fora o que a pessoa estava escrevendo
+        if let formulario = presentedViewController as? FormularioAtividadeViewController,
+           formulario.temAlteracoes { return }
+        if botaoNovaAtividade.estaAberto { abrirLeque(false) }
+        // se já existe uma folha aberta, fecha antes de mostrar a do planeta tocado
+        if let apresentado = presentedViewController {
+            apresentado.dismiss(animated: false) { [weak self] in
+                self?.abrirFormulario(.editar(atividade))
+            }
+        } else {
+            abrirFormulario(.editar(atividade))
+        }
     }
 
     private func abrirFormulario(_ modo: FormularioAtividadeViewController.Modo) {

@@ -273,6 +273,20 @@ final class FormularioAtividadeViewController: UIViewController {
     }
 
 
+    /// Tem algo digitado ou escolhido que ainda não foi salvo?
+    var temAlteracoes: Bool {
+        guard isViewLoaded else { return false }
+        let descricao = descricaoTextView.text ?? ""
+        switch modo {
+        case .nova(let prioridade):
+            return !tituloLimpo.isEmpty || !descricao.isEmpty || prioridadeSelecionada != prioridade
+        case .editar(let atividade):
+            return tituloLimpo != atividade.titulo
+                || descricao != atividade.descricao
+                || prioridadeSelecionada != atividade.prioridade
+        }
+    }
+
     @objc private func fecharToque() {
         dismiss(animated: true)
     }

@@ -8,20 +8,27 @@
 import Foundation
 import CoreGraphics
 
-nonisolated enum Prioridade: String, Codable, CaseIterable{
-    
+nonisolated enum Prioridade: String, Codable, CaseIterable {
     case pequena, media, grande
     
+    // quanto maior, mais cedo aparece no widget
+    var peso: Int {
+        switch self {
+        case .pequena: return 0
+        case .media: return 1
+        case .grande: return 2
+        }
+    }
+
     var nome: String {
         switch self {
         case .pequena: return "Pequena"
         case .media: return "Média"
         case .grande: return "Grande"
-            
         }
     }
     
-    //determina em pixels o diamentro dos planetas
+    //determina em pontos o diâmetro dos planetas
     var diametroBase: CGFloat {
         switch self {
         case .pequena: return 90
@@ -30,7 +37,7 @@ nonisolated enum Prioridade: String, Codable, CaseIterable{
         }
     }
     
-    // cuidado para telas menores. Saturno usa o corpo de 180 px em vez do da prioridade.
+    // cuidado para telas menores. Saturno usa o próprio corpo (170) em vez do da prioridade.
     func diametro(menorLado: CGFloat, aparencia: AparenciaPlaneta? = nil) -> CGFloat {
         let base = aparencia?.diametroCorpo ?? diametroBase
         return base * Self.escala(menorLado: menorLado)
@@ -43,7 +50,7 @@ nonisolated enum Prioridade: String, Codable, CaseIterable{
         return min(1.6, 1 + (menorLado - 440) / 1000)
     }
     
-    var elasticidade: CGFloat{
+    var elasticidade: CGFloat {
         switch self {
         case .pequena: return 0.55
         case .media: return 0.4
@@ -51,47 +58,41 @@ nonisolated enum Prioridade: String, Codable, CaseIterable{
         }
     }
     
-    var densidade: CGFloat{
+    var densidade: CGFloat {
         switch self {
         case .pequena: return 0.6
         case .media: return 1.0
         case .grande: return 2.2
         }
     }
-    
-        func tamanhoDoTitulo(menorLado: CGFloat) -> CGFloat {
-            let base: CGFloat
-            switch self {
-            case .pequena: base = 13
-            case .media: base = 15
-            case .grande: base = 17
-            }
-            return base * Self.escala(menorLado: menorLado)
-        }
 
-        var aparenciaPadrao: AparenciaPlaneta {
-            switch self {
-            case .pequena: return .lua
-            case .media: return .terra
-            case .grande: return .jupiter
-            }
+    func tamanhoDoTitulo(menorLado: CGFloat) -> CGFloat {
+        let base: CGFloat
+        switch self {
+        case .pequena: base = 13
+        case .media: base = 15
+        case .grande: base = 17
         }
+        return base * Self.escala(menorLado: menorLado)
+    }
 
-        var aparencias: [AparenciaPlaneta] {
-            switch self {
-            case .pequena: return [.lua, .tita]
-            case .media: return [.terra, .marte]
-            case .grande: return [.jupiter, .saturno]
-            }
-        }
-
-        func sortearAparencia() -> AparenciaPlaneta {
-            return aparencias.randomElement() ?? aparenciaPadrao
+    var aparenciaPadrao: AparenciaPlaneta {
+        switch self {
+        case .pequena: return .lua
+        case .media: return .terra
+        case .grande: return .jupiter
         }
     }
-    
-    
-    
-    
-    
-    
+
+    var aparencias: [AparenciaPlaneta] {
+        switch self {
+        case .pequena: return [.lua, .tita]
+        case .media: return [.terra, .marte]
+        case .grande: return [.jupiter, .saturno]
+        }
+    }
+
+    func sortearAparencia() -> AparenciaPlaneta {
+        return aparencias.randomElement() ?? aparenciaPadrao
+    }
+}

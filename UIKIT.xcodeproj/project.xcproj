@@ -15,11 +15,34 @@
       "kind": "folder",
       "path": "UIKIT",
       "target-membership": [
-        "UIKIT",
+        "Gravita",
       ],
       "membership-exceptions": [
         {
-          "target": "UIKIT",
+          "target": "Gravita",
+          "exclusions": [
+            "Assets.xcassets",
+            "Info.plist",
+          ],
+        },
+      ],
+    }, {
+      "path": "UIKIT/Assets.xcassets",
+      "target-membership": [
+        "Gravita/resources",
+        "OrbitaWidget/resources",
+      ],
+    },
+    { "kind": "folder", "path": "Compartilhado", "target-membership": [ "Gravita", "OrbitaWidget" ] },
+    {
+      "kind": "folder",
+      "path": "OrbitaWidget",
+      "target-membership": [
+        "OrbitaWidget",
+      ],
+      "membership-exceptions": [
+        {
+          "target": "OrbitaWidget",
           "exclusions": [
             "Info.plist",
           ],
@@ -29,25 +52,35 @@
       "kind": "group",
       "name": "Products",
       "children": [
-        { "path": "<PRODUCTS>/UIKIT.app", "id": "0168354330A495B600A4C18D", "type": "wrapper.application", "index": false },
+        { "path": "<PRODUCTS>/Gravita.app", "id": "0168354330A495B600A4C18D", "type": "wrapper.application", "index": false },
+        { "path": "<PRODUCTS>/OrbitaWidget.appex", "id": "0A1B2C3D4E5F60718293A4B6", "type": "wrapper.app-extension", "index": false, "target-membership": [ { "build-phase": "Gravita/copy/Embed App Extensions", "code-sign-on-copy": true } ] },
       ],
     },
   ],
   "targets": [
     {
-      "name": "UIKIT",
+      "name": "Gravita",
       "id": "0168354230A495B600A4C18D",
-      "product": "Products/UIKIT.app",
+      "product": "Products/Gravita.app",
       "product-type": "application",
+      "dependencies": [
+        "OrbitaWidget",
+      ],
       "build-phases": [
         "compile-sources",
         "frameworks",
         "resources",
+        {
+          "kind": "copy",
+          "name": "Embed App Extensions",
+          "bundle-base-path": "plugins-directory",
+        },
       ],
       "build-settings": {
         "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
         "ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME": "AccentColor",
         "ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS": "YES",
+        "CODE_SIGN_ENTITLEMENTS": "UIKIT/UIKIT.entitlements",
         "CODE_SIGN_STYLE": "Automatic",
         "CURRENT_PROJECT_VERSION": "3",
         "DEVELOPMENT_TEAM": "653339QRYZ",
@@ -76,6 +109,40 @@
         "SWIFT_DEFAULT_ACTOR_ISOLATION": "MainActor",
         "SWIFT_EMIT_LOC_STRINGS": "YES",
         "SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY": "YES",
+        "SWIFT_VERSION": "5.0",
+        "TARGETED_DEVICE_FAMILY": "1,2",
+      },
+    }, {
+      "name": "OrbitaWidget",
+      "id": "0A1B2C3D4E5F60718293A4B5",
+      "product": "Products/OrbitaWidget.appex",
+      "product-type": "app-extension",
+      "build-phases": [
+        "compile-sources",
+        "frameworks",
+        "resources",
+      ],
+      "build-settings": {
+        "APPLICATION_EXTENSION_API_ONLY": "YES",
+        "ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME": "AccentColor",
+        "CODE_SIGN_ENTITLEMENTS": "OrbitaWidget/OrbitaWidget.entitlements",
+        "CODE_SIGN_STYLE": "Automatic",
+        "CURRENT_PROJECT_VERSION": "3",
+        "DEVELOPMENT_TEAM": "653339QRYZ",
+        "GENERATE_INFOPLIST_FILE": "YES",
+        "INFOPLIST_FILE": "OrbitaWidget/Info.plist",
+        "INFOPLIST_KEY_CFBundleDisplayName": "Gravita",
+        "LD_RUNPATH_SEARCH_PATHS": [
+          "$(inherited)",
+          "@executable_path/Frameworks",
+          "@executable_path/../../Frameworks",
+        ],
+        "MARKETING_VERSION": "1.0.4",
+        "PRODUCT_BUNDLE_IDENTIFIER": "com.bear.orbita.OrbitaWidget",
+        "PRODUCT_NAME": "$(TARGET_NAME)",
+        "REGISTER_APP_GROUPS": "YES",
+        "SKIP_INSTALL": "YES",
+        "SWIFT_EMIT_LOC_STRINGS": "YES",
         "SWIFT_VERSION": "5.0",
         "TARGETED_DEVICE_FAMILY": "1,2",
       },

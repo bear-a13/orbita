@@ -17,6 +17,7 @@ final class UniversoViewController: UIViewController {
 
     
     private var planetas: [PlanetaView] = []
+    private var ultimoTamanho = CGSize.zero
 
     
 
@@ -43,8 +44,11 @@ final class UniversoViewController: UIViewController {
         fisica = UniversoFisico(referencia: view)
 
         sensor.aoMudarGravidade = { [weak self] direcao in
-            let gravidadeFinal = UIAccessibility.isReduceMotionEnabled ? CGVector(dx: 0, dy: 1) : direcao
-            self?.fisica?.definirGravidade(gravidadeFinal)
+            guard let self else { return }
+            let gravidadeFinal = UIAccessibility.isReduceMotionEnabled
+                ? CGVector(dx: 0, dy: 1)
+                : self.converterParaInterface(direcao)
+            self.fisica?.definirGravidade(gravidadeFinal)
         }
 
         sensor.aoChacoalhar = { [weak self] in
@@ -52,8 +56,8 @@ final class UniversoViewController: UIViewController {
         }
 
         sensor.aoBalancar = { [weak self] aceleracao, intervalo in
-            guard !UIAccessibility.isReduceMotionEnabled else { return }
-            self?.fisica?.balancar(aceleracao: aceleracao, intervalo: intervalo)
+            guard let self, !UIAccessibility.isReduceMotionEnabled else { return }
+            self.fisica?.balancar(aceleracao: self.converterParaInterface(aceleracao), intervalo: intervalo)
         }
 // assim é possivel controlar o nivel de vibração
         vibracaoBatida.prepare()
@@ -77,6 +81,22 @@ final class UniversoViewController: UIViewController {
         super.viewDidLayoutSubviews()
         fisica?.atualizarLimites(margens: view.safeAreaInsets,
                                  obstaculos: [botaoNovaAtividade.frame])
+
+        // girar o iPad ou redimensionar a janela pode deixar planetas do lado de fora
+        if view.bounds.size != ultimoTamanho {
+            ultimoTamanho = view.bounds.size
+            fisica?.trazerParaDentro(de: view.bounds.inset(by: view.safeAreaInsets))
+        }
+    }
+
+    // O sensor fala no eixo do aparelho em pé. No iPad a tela gira, então o vetor gira junto.
+    private func converterParaInterface(_ v: CGVector) -> CGVector {
+        switch view.window?.windowScene?.effectiveGeometry.interfaceOrientation {
+        case .landscapeRight: return CGVector(dx: v.dy, dy: -v.dx)
+        case .landscapeLeft: return CGVector(dx: -v.dy, dy: v.dx)
+        case .portraitUpsideDown: return CGVector(dx: -v.dx, dy: -v.dy)
+        default: return v
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -192,7 +212,7 @@ final class UniversoViewController: UIViewController {
         guard store.pendentes().isEmpty else { return }
 
         let exemplos: [(String, Prioridade, AparenciaPlaneta)] = [
-            ("precione: concluir", .grande, .jupiter),
+            ("pressione: concluir", .grande, .jupiter),
             ("Toque: editar", .grande, .saturno),
         ]
         for (titulo, prioridade, aparencia) in exemplos {
@@ -203,10 +223,10 @@ final class UniversoViewController: UIViewController {
    
     private func criarPlaneta(para atividade: Atividade, centro: CGPoint? = nil) {
         guard let fisica else { return }
-        let largura = view.bounds.width
+        let menorLado = min(view.bounds.width, view.bounds.height)
         let prioridade = atividade.prioridade
         let aparencia = atividade.aparencia
-        let diametro = prioridade.diametro(larguraDaTela: largura)
+        let diametro = prioridade.diametro(menorLado: menorLado, aparencia: aparencia)
 
         let planeta = PlanetaView(
             atividadeID: atividade.id,
@@ -215,7 +235,7 @@ final class UniversoViewController: UIViewController {
             diametro: diametro,
             escalaDaImagem: aparencia.escalaDaImagem,
             corDoTitulo: UIColor(hex: aparencia.corDoTituloHex),
-            tamanhoDoTitulo: prioridade.tamanhoDoTitulo(larguraDaTela: largura)
+            tamanhoDoTitulo: prioridade.tamanhoDoTitulo(menorLado: menorLado)
         )
         planeta.delegate = self
         planeta.center = centro ?? posicaoLivre(diametro: diametro,
@@ -306,7 +326,7 @@ extension UniversoViewController: PlanetaViewDelegate {
     }
 
     /*
-     A exclusão agora é por pressão longa de 3s, não mais pelo duplo toque.
+     A conclusão agora é por pressão longa de 1,5 s, não mais pelo duplo toque.
      */
     func planetaFoiPressionadoLongo(_ planeta: PlanetaView) {
         if let atividade = store.buscar(id: planeta.atividadeID) {

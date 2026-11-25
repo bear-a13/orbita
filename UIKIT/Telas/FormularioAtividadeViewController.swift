@@ -289,7 +289,7 @@ final class FormularioAtividadeViewController: UIViewController {
     @objc private func salvarToque() {
         let titulo = tituloLimpo
         guard !titulo.isEmpty else { return }
-        let descricao = descricaoTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let descricao = descricaoTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
 
         switch modo {
         case .nova:

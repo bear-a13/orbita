@@ -13,7 +13,17 @@ nonisolated enum AparenciaPlaneta: String, Codable, CaseIterable {
 
     var nomeDoAsset: String { "planeta-\(rawValue)" }
 
-    
+    // nil = usa o diâmetro da prioridade. Saturno tem o corpo menor que Júpiter (170 vs 200),
+    // porque os anéis fazem ele parecer maior do que é.
+    var diametroCorpo: CGFloat? {
+        switch self {
+        case .saturno: return 170
+        default: return nil
+        }
+    }
+
+    // Tamanho da imagem em relação ao corpo. No asset do Saturno o corpo mede 200 de uma
+    // imagem de 353,49 x 269,77, então essa proporção é fixa e vale para qualquer diâmetro.
     var escalaDaImagem: CGSize {
         switch self {
         case .saturno: return CGSize(width: 353.49 / 200, height: 269.77 / 200)
@@ -21,7 +31,6 @@ nonisolated enum AparenciaPlaneta: String, Codable, CaseIterable {
         }
     }
 
-    
     var corDoTituloHex: UInt32 {
         switch self {
         case .lua: return 0x1E2236

@@ -86,7 +86,7 @@ final class PlanetaView: UIView {
             
             let arrasto = UIPanGestureRecognizer(target: self, action: #selector(arrastou(_:)))
             
-            // Começa rápido (0,2 s) para o anel aparecer logo; os 3 s são contados por nós.
+            // Começa rápido (0,2 s) para o anel aparecer logo; o tempo real é contado por nós.
             let longo = UILongPressGestureRecognizer(target: self, action: #selector(pressionouLongo(_:)))
             longo.minimumPressDuration = 0.2
 
@@ -98,7 +98,7 @@ final class PlanetaView: UIView {
         private func configurarAcessibilidade(titulo: String) {
             isAccessibilityElement = true
             accessibilityLabel = titulo
-            accessibilityHint = "Toque para editar. Segure por 3 segundos para concluir."
+            accessibilityHint = "Toque para editar. Segure por 1,5 segundos para concluir."
             
             
             // Como o toque duplo no VoiceOver ativa o item, criamos uma ação explícita para concluir
@@ -126,7 +126,7 @@ final class PlanetaView: UIView {
         }
 
         private func comecarSegurar() {
-            // anel amarelo em volta do planeta que vai se fechando private let tempoParaConcluir: TimeInterval = 1.5
+            // anel amarelo em volta do planeta que vai se fechando até concluir
 
             let anel = CAShapeLayer()
             let raio = bounds.width / 2
@@ -167,9 +167,8 @@ final class PlanetaView: UIView {
         }
 
         private func cancelarSegurar() {
-            guard inicioSegurar != nil else { return }  
+            guard inicioSegurar != nil else { return }
             pararSegurar()
-            UIView.animate(withDuration: 0.2) { self.imagem.transform = .identity }
         }
 
         private func pararSegurar() {

@@ -76,6 +76,19 @@ final class UniversoFisico: NSObject {
         }
     
 
+    // puxa de volta quem ficou fora da área visível
+    func trazerParaDentro(de area: CGRect) {
+        for item in colisao.items {
+            let raioX = min(item.bounds.width / 2, area.width / 2)
+            let raioY = min(item.bounds.height / 2, area.height / 2)
+            let destino = CGPoint(x: min(max(item.center.x, area.minX + raioX), area.maxX - raioX),
+                                  y: min(max(item.center.y, area.minY + raioY), area.maxY - raioY))
+            guard destino != item.center else { continue }
+            item.center = destino
+            animator.updateItem(usingCurrentState: item)
+        }
+    }
+
     //muda a direção da gravidade
     func definirGravidade(_ direcao: CGVector) {
         gravidade.gravityDirection = direcao

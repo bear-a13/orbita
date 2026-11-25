@@ -29,7 +29,7 @@ COMO FUNCIONA
 • Incline o iPhone e os planetas rolam pela tela. Chacoalhe e eles se espalham.
 • Arraste qualquer planeta com o dedo e solte para ver ele quicar.
 • Toque em um planeta para editar a pendência.
-• Segure o planeta por 3 segundos para concluir. Um anel vai se fechando, o iPhone vibra cada vez mais forte e, quando termina, o planeta some.
+• Segure o planeta por 1,5 segundo para concluir. Um anel vai se fechando, o iPhone vibra cada vez mais forte e, quando termina, o planeta some.
 
 FEITO PARA SER SIMPLES
 • Sem conta, sem cadastro e sem anúncios.
@@ -59,7 +59,7 @@ O app já declara `ITSAppUsesNonExemptEncryption = NO`, então não pergunta de 
   O Gravita não tem conta nem internet. Na primeira abertura aparecem dois planetas de exemplo.
   Para criar uma tarefa: toque no botão amarelo "+" na parte de baixo, escolha a prioridade
   (pequena, média ou grande), preencha o título e confirme no botão de check.
-  Toque em um planeta para editar. Segure o planeta por 3 segundos para concluir.
+  Toque em um planeta para editar. Segure o planeta por 1,5 segundo para concluir.
   O movimento dos planetas usa o acelerômetro (incline o aparelho); no simulador, use
   Device → Shake para chacoalhar.
 - **Contato de revisão:** preencher nome, telefone e e-mail no próprio App Store Connect.

@@ -31,9 +31,16 @@ nonisolated enum Prioridade: String, Codable, CaseIterable{
     }
     
     // cuidado para telas menores. Saturno usa o corpo de 180 px em vez do da prioridade.
-    func diametro(larguraDaTela: CGFloat, aparencia: AparenciaPlaneta? = nil) -> CGFloat {
+    func diametro(menorLado: CGFloat, aparencia: AparenciaPlaneta? = nil) -> CGFloat {
         let base = aparencia?.diametroCorpo ?? diametroBase
-        return base * min(1, larguraDaTela / 440)
+        return base * Self.escala(menorLado: menorLado)
+    }
+
+    // iPhone: encolhe abaixo de 440 pt. iPad e Mac: cresce aos poucos, até 1,6x,
+    // para os planetas não ficarem perdidos na tela grande.
+    private static func escala(menorLado: CGFloat) -> CGFloat {
+        guard menorLado > 440 else { return menorLado / 440 }
+        return min(1.6, 1 + (menorLado - 440) / 1000)
     }
     
     var elasticidade: CGFloat{
@@ -52,14 +59,14 @@ nonisolated enum Prioridade: String, Codable, CaseIterable{
         }
     }
     
-        func tamanhoDoTitulo(larguraDaTela: CGFloat) -> CGFloat {
+        func tamanhoDoTitulo(menorLado: CGFloat) -> CGFloat {
             let base: CGFloat
             switch self {
             case .pequena: base = 13
             case .media: base = 15
             case .grande: base = 17
             }
-            return base * min(1, larguraDaTela / 440)
+            return base * Self.escala(menorLado: menorLado)
         }
 
         var aparenciaPadrao: AparenciaPlaneta {

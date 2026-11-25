@@ -1,0 +1,28 @@
+1. SCREEN RECORDING
+Recorded on a physical device: iphone 16, iOS 27. https://photos.icloud.com/shared/album/01cLbONHN634DFvNNU7LA46fA 
+It starts with launching the app and shows creating, moving, editing and completing a task.
+The app has no account registration, login or account deletion, no paid content, and no content shared between users. Task titles and descriptions are private and stay on the device.
+
+2. PURPOSE AND AUDIENCE
+Gravita is a personal to-do app in which each task is a planet. Higher priority means a bigger and heavier planet.
+Problem: long to-do lists feel tiring and make every task look equally important.
+Value: people see everything they need to do on one screen, recognize priorities by size, and interact with tasks physically by tilting, shaking, dragging and holding.
+Audience: students and general users who want a simple, visual way to keep track of personal tasks.
+
+3. HOW TO USE
+No setup, login, credentials or sample files are needed. Two example planets appear on first launch. The interface is in Portuguese.
+- Create: tap the yellow "+" button, choose Pequena (small), Média (medium) or Grande (large), type a title and tap the check button.
+- Edit: tap a planet, change its data and tap the check button.
+- Move: drag and release a planet, or tilt or shake the device.
+- Complete: press and hold a planet for about 1.5 seconds, until the yellow ring closes. The planet then disappears.
+Tilt and shake need motion sensors. With Reduce Motion on, tilt and shake effects are turned off; dragging, editing and completing still work.
+
+4. EXTERNAL SERVICES
+None. The app uses no data providers, authentication, payment processors, AI services, analytics, ads or third-party SDKs, and makes no network requests. It uses Apple frameworks only (UIKit, UIKit Dynamics, Core Motion, SwiftData). Data is stored locally on the device.
+
+5. REGIONAL DIFFERENCES
+None. The app works the same way in all regions. Its interface is in Portuguese (Brazil).
+
+6. REGULATED INDUSTRY / THIRD-PARTY MATERIAL
+The app does not operate in a regulated industry.
+The planet illustrations were redrawn and modified by the developer, using existing illustrations found online as visual references. The developer does not hold a license for those references. The rest of the interface was created by the developer.
